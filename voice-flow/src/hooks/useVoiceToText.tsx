@@ -110,3 +110,151 @@ export const useVoiceToText = () => {
   };
 };
 
+
+
+
+
+
+
+
+
+
+
+// import { useState, useRef, useEffect, useCallback } from "react";
+// import {
+//   createClient,
+//   LiveClient,
+//   LiveTranscriptionEvents,
+// } from "@deepgram/sdk";
+// import { AudioRecorder } from "../utils/audioRecorder";
+
+// const API_KEY = import.meta.env.VITE_DEEPGRAM_API_KEY;
+
+// export const useVoiceToText = () => {
+//   const [transcript, setTranscript] = useState("");
+//   const [isListening, setIsListening] = useState(false);
+//   const [status, setStatus] = useState("Ready");
+//   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+
+//   // Refs
+//   const deepgramLive = useRef<LiveClient | null>(null);
+//   const audioRecorder = useRef<AudioRecorder>(new AudioRecorder());
+//   const deepgram = createClient(API_KEY);
+  
+//   // FAILSAFE: strict boolean to track if we should really be recording
+//   const shouldBeRecording = useRef(false);
+
+//   useEffect(() => {
+//     return () => {
+//       stopRecording();
+//     };
+//   }, []);
+
+//   const startRecording = useCallback(async () => {
+//     setErrorMessage(null);
+//     shouldBeRecording.current = true; // Mark as active intention
+
+//     try {
+//       setStatus("Connecting...");
+      
+//       // Prevent multiple connections
+//       if (deepgramLive.current) return;
+
+//       const connection = deepgram.listen.live({
+//         model: "nova-2",
+//         language: "en-US",
+//         smart_format: true,
+//         interim_results: true,
+//       });
+
+//       deepgramLive.current = connection;
+
+//       connection.on(LiveTranscriptionEvents.Open, async () => {
+//         // CANCELLATION CHECK:
+//         // If the user released the button while we were connecting, ABORT.
+//         if (!shouldBeRecording.current) {
+//           console.log("Hook: Connection opened but user cancelled. Closing.");
+//           connection.finish();
+//           deepgramLive.current = null;
+//           setStatus("Ready");
+//           return;
+//         }
+
+//         setStatus("Connected");
+//         console.log("Hook: Socket OPEN. Starting Mic...");
+
+//         try {
+//           await audioRecorder.current.start((audioBlob) => {
+//             // Send only if we are still intending to record AND socket is valid
+//             if (shouldBeRecording.current && deepgramLive.current) {
+//               deepgramLive.current.send(audioBlob);
+//             }
+//           });
+//           setIsListening(true);
+//         } catch (micError: any) {
+//           console.error("Mic Error:", micError);
+//           setErrorMessage("Microphone Permission Denied");
+//           setStatus("Error");
+//         }
+//       });
+
+//       connection.on(LiveTranscriptionEvents.Transcript, (data) => {
+//         const newText = data.channel.alternatives[0].transcript;
+//         if (newText) {
+//           setTranscript((prev) => {
+//              if (prev.endsWith(newText)) return prev;
+//              return prev + " " + newText;
+//           });
+//         }
+//       });
+
+//       connection.on(LiveTranscriptionEvents.Error, (err) => {
+//         console.error("API Error:", err);
+//         setErrorMessage("Connection Error");
+//         setStatus("Error");
+//         stopRecording();
+//       });
+
+//       connection.on(LiveTranscriptionEvents.Close, () => {
+//         console.log("Hook: Socket Closed");
+//         setStatus("Ready");
+//       });
+
+//     } catch (error) {
+//       console.error("Setup Error:", error);
+//       setErrorMessage("Could not connect to API");
+//     }
+//   }, []);
+
+//   const stopRecording = useCallback(() => {
+//     console.log("Hook: Stopping...");
+//     shouldBeRecording.current = false; // IMMEDIATE STOP SIGNAL
+    
+//     // Stop Mic
+//     audioRecorder.current.stop();
+
+//     // Stop Socket
+//     if (deepgramLive.current) {
+//       deepgramLive.current.finish();
+//       deepgramLive.current = null;
+//     }
+
+//     setIsListening(false);
+//     setStatus("Ready");
+//   }, []);
+
+//   return {
+//     transcript,
+//     isListening,
+//     status,
+//     errorMessage,
+//     startRecording,
+//     stopRecording,
+//     setTranscript,
+//   };
+// };
+
+
+
+
+
