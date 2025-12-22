@@ -1,3 +1,5 @@
+
+
 import { useState, useRef, useEffect, useCallback } from "react";
 
 import { createClient, LiveClient, LiveTranscriptionEvents } from "@deepgram/sdk";

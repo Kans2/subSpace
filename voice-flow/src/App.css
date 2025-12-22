@@ -183,3 +183,23 @@ textarea:focus {
   50% { opacity: 0.6; }
   100% { opacity: 1; }
 }
+
+/* Add this to App.css */
+
+.warning-banner {
+  background-color: #fffbe6; /* Light yellow background */
+  border: 1px solid #ffe58f;
+  color: #d48806; /* Dark orange text */
+  padding: 10px 20px;
+  border-radius: 8px;
+  width: 100%;
+  font-weight: 500;
+  margin-bottom: 10px;
+  font-size: 0.9rem;
+  animation: fadeIn 0.3s ease-in;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
