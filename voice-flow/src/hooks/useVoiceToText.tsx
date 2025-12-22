@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect, useCallback } from "react";
+
 import { createClient, LiveClient, LiveTranscriptionEvents } from "@deepgram/sdk";
 
 const API_KEY = import.meta.env.VITE_DEEPGRAM_API_KEY;
@@ -74,7 +75,7 @@ export const useVoiceToText = () => {
     } catch (error: any) {
       console.error("Microphone access denied:", error);
       // 4. Handle Microphone/System Errors
-      setErrorMessage(error.message || "Microphone access denied. Please allow permissions.");
+      setErrorMessage( "Microphone access denied. Please allow permissions.");
       setStatus("Microphone Error");
     }
   }, []);
@@ -108,3 +109,4 @@ export const useVoiceToText = () => {
     setTranscript 
   };
 };
+
